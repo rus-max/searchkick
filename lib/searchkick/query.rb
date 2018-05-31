@@ -746,8 +746,12 @@ module Searchkick
           payload[:aggs][field] = {
             date_histogram: {
               field: histogram[:field],
-              interval: interval
-            }
+              interval: interval,
+              extended_bounds: {
+                min: histogram[:extend_bound_min],
+                max: histogram[:extend_bound_max]
+              }
+            }.merge(shared_agg_options)
           }
         elsif (metric = @@metric_aggs.find { |k| agg_options.has_key?(k) })
           payload[:aggs][field] = {
